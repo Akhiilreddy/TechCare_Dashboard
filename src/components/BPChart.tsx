@@ -27,6 +27,9 @@ ChartJS.register(
 export const BloodPressureChart = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [apiData, setApiData] = useState<any>(undefined);
+  const [systolicAvg, setSystolicAvg] = useState<number>();
+  const [diastolicAvg, setDiastolicAvg] = useState<number>();
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,24 +39,38 @@ export const BloodPressureChart = () => {
             Authorization: `Basic ${credentials}`
           }
         });
-        setApiData(res.data[3]); 
-        console.log(res.data);
-        console.log("systolicData: ",res.data[3].diagnosis_history);
+        setApiData(res.data[3].diagnosis_history.slice(0,6));
       } catch (err) {
         console.error("Error fetching: ", err);
       }
     };
 
+    
+    
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if(apiData) {
+      console.log("apidata: ",apiData);
+      const totalSystolic = apiData.reduce((sum: number, entry: any) => sum + entry.blood_pressure.systolic.value, 0);
+      const totalDiastolic = apiData.reduce((sum: number, entry: any) => sum + entry.blood_pressure.diastolic.value, 0);
 
-  const chartData = {
-    labels: ['Oct, 2023', 'Nov, 2023', 'Dec, 2023', 'Jan, 2024', 'Feb, 2024', 'Mar, 2024'],
+      const avgSystolic = parseFloat((totalSystolic / apiData.length).toFixed(0));
+      const avgDiastolic = parseFloat((totalDiastolic / apiData.length).toFixed(0));
+
+      setSystolicAvg(avgSystolic);
+      setDiastolicAvg(avgDiastolic);
+    }
+  }, [apiData])
+  
+
+  const chartData = apiData ? {
+    labels: apiData.map((entry: any) => `${entry.month}, ${entry.year}`),
     datasets: [
       {
         label: 'Systolic',
-        data: [120, 118, 160, 115, 148, 160],
+        data: apiData.map((entry: any) => entry.blood_pressure.systolic.value),
         borderColor: '#FF69B4',
         backgroundColor: '#FF69B4',
         tension: 0.4,
@@ -62,7 +79,7 @@ export const BloodPressureChart = () => {
       },
       {
         label: 'Diastolic',
-        data: [110, 65, 108, 90, 70, 78],
+        data: apiData.map((entry: any) => entry.blood_pressure.diastolic.value),
         borderColor: '#8A2BE2',
         backgroundColor: '#8A2BE2',
         tension: 0.4,
@@ -70,7 +87,10 @@ export const BloodPressureChart = () => {
         pointBackgroundColor: '#8A2BE2',
       },
     ],
-  };
+  } : {
+    label: [],
+    datasets: []
+  }
 
   const options = {
     responsive: true,
@@ -127,12 +147,12 @@ export const BloodPressureChart = () => {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold">Systolic</span>
-            <span className="text-2xl font-bold">160</span>
+            <span className="text-2xl font-bold">{systolicAvg}</span>
             <span className="text-sm text-gray-500">Higher than Average</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold">Diastolic</span>
-            <span className="text-2xl font-bold">78</span>
+            <span className="text-2xl font-bold">{diastolicAvg}</span>
             <span className="text-sm text-gray-500">Lower than Average</span>
           </div>
         </div>

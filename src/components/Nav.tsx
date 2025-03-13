@@ -24,7 +24,6 @@ export const Navbar = () => {
         });
         
         setdocInfo(res.data[8]);
-        console.log("Doc info: ",res.data[5]);
       } catch (err) {
         console.error("Error fetching: ", err);
       }

@@ -49,7 +49,7 @@ export const DiagnosticList = ({ diagnostics }: Props) => {
               {diag.status}
               </td>
             </tr>
-            ))):""}
+            ))):null}
           </tbody>
         </table>
       </div>

@@ -48,9 +48,9 @@ export const PatientsList = ({ patients, selectedPatientId, onPatientSelect }: P
         </div>
       </div>
       <div className="space-y-4 max-h-96 overflow-y-auto">
-        {patientList.map((patient) => (
+        {patientList.map((patient, index) => (
           <div
-            key={patient.id}
+            key={index}
             onClick={() => onPatientSelect(patient.name)}
             className={`flex items-center justify-between p-3 rounded-lg cursor-pointer ${
               selectedPatientId === patient.name ? 'bg-light-special-green' : 'hover:bg-gray-200'

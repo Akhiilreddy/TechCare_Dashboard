@@ -24,7 +24,6 @@ export const LabResults = ({ results }: Props) => {
         });
         
         setLabResults(res.data[3].lab_results);
-        console.log("lab results: ",res.data[3].lab_results);
       } catch (err) {
         console.error("Error fetching: ", err);
       }
