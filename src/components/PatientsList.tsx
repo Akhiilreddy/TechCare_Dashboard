@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { credentials } from '../utils/login';
 import Search from '../assets/Search.svg'
 import MoreDots from '../assets/MoreDots.svg'
-import { credentials } from '../utils/login';
 
 interface Patient {
   id: string;
@@ -17,7 +17,7 @@ interface Props {
   onPatientSelect: (id: string) => void;
 }
 
-export const PatientsList = ({ patients, selectedPatientId, onPatientSelect }: Props) => {
+export const PatientsList = ({ selectedPatientId, onPatientSelect }: Props) => {
   const [patientList, setPatientList] = useState<Patient[]>([]);
 
   useEffect(() => {

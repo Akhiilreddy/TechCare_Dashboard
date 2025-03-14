@@ -4,7 +4,7 @@ import { PatientInfo } from './components/PatientInfo';
 import { BloodPressureChart } from './components/BPChart';
 import { DiagnosticList } from './components/DiagList.tsx';
 import { LabResults } from './components/LabResults.tsx';
-import { mockPatientData, patientsList } from './utils/mockData.ts';
+import { mockPatientData } from './utils/mockData.ts';
 import { Navbar } from './components/Nav.tsx';
 
 function App() {
@@ -17,7 +17,6 @@ function App() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           <div className="md:col-span-3">
             <PatientsList
-              patients={patientsList}
               selectedPatientId={selectedPatientId}
               onPatientSelect={setSelectedPatientId}
             />

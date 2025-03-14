@@ -1,4 +1,4 @@
-import { Line } from 'react-chartjs-2';
+import {Line} from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,6 +12,10 @@ import {
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { credentials } from '../utils/login';
+import { CardComponent } from './CardComponent';
+import RespiratoryRate from '../assets/respiratory rate.svg'
+import Temperature from '../assets/temperature.svg'
+import HeartBPM from '../assets/HeartBPM.svg'
 
 ChartJS.register(
   CategoryScale,
@@ -29,6 +33,9 @@ export const BloodPressureChart = () => {
   const [apiData, setApiData] = useState<any>(undefined);
   const [systolicAvg, setSystolicAvg] = useState<number>();
   const [diastolicAvg, setDiastolicAvg] = useState<number>();
+  const [respiratoryRate, setRespiratoryRate] = useState<number>();
+  const [temperature, setTemperature] = useState<number>();
+  const [heartRate, setHeartRate] = useState<number>();
   
 
   useEffect(() => {
@@ -45,32 +52,28 @@ export const BloodPressureChart = () => {
       }
     };
 
-    
-    
     fetchData();
   }, []);
 
   useEffect(() => {
     if(apiData) {
-      console.log("apidata: ",apiData);
-      const totalSystolic = apiData.reduce((sum: number, entry: any) => sum + entry.blood_pressure.systolic.value, 0);
-      const totalDiastolic = apiData.reduce((sum: number, entry: any) => sum + entry.blood_pressure.diastolic.value, 0);
+      setSystolicAvg(apiData[0].blood_pressure.diastolic);
+      setDiastolicAvg(apiData[0].blood_pressure.diastolic);
 
-      const avgSystolic = parseFloat((totalSystolic / apiData.length).toFixed(0));
-      const avgDiastolic = parseFloat((totalDiastolic / apiData.length).toFixed(0));
-
-      setSystolicAvg(avgSystolic);
-      setDiastolicAvg(avgDiastolic);
+      setRespiratoryRate(apiData[0].respiratory_rate);
+      setTemperature(apiData[0].temperature);
+      setHeartRate(apiData[0].heart_rate);
+      
     }
   }, [apiData])
   
 
   const chartData = apiData ? {
-    labels: apiData.map((entry: any) => `${entry.month}, ${entry.year}`),
+    labels: apiData.map((x: any) => `${x.month}, ${x.year}`),
     datasets: [
       {
         label: 'Systolic',
-        data: apiData.map((entry: any) => entry.blood_pressure.systolic.value),
+        data: apiData.map((x: any) => x.blood_pressure.systolic.value),
         borderColor: '#FF69B4',
         backgroundColor: '#FF69B4',
         tension: 0.4,
@@ -79,7 +82,7 @@ export const BloodPressureChart = () => {
       },
       {
         label: 'Diastolic',
-        data: apiData.map((entry: any) => entry.blood_pressure.diastolic.value),
+        data: apiData.map((x: any) => x.blood_pressure.diastolic.value),
         borderColor: '#8A2BE2',
         backgroundColor: '#8A2BE2',
         tension: 0.4,
@@ -145,24 +148,28 @@ export const BloodPressureChart = () => {
     <div className="bg-white p-6 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <div className="space-y-1">
+          <p className="text-2xl font-bold">Diagnosis History</p>
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold">Systolic</span>
-            <span className="text-2xl font-bold">{systolicAvg}</span>
-            <span className="text-sm text-gray-500">Higher than Average</span>
+            <span className="text-lg font-bold">{systolicAvg?.value}</span>
+            <span className="text-sm text-gray-500">{systolicAvg?.levels}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold">Diastolic</span>
-            <span className="text-2xl font-bold">{diastolicAvg}</span>
-            <span className="text-sm text-gray-500">Lower than Average</span>
+            <span className="text-lg font-bold">{diastolicAvg?.value}</span>
+            <span className="text-sm text-gray-500">{diastolicAvg?.levels}</span>
           </div>
         </div>
-        <select className="border rounded-md px-3 py-1 text-sm">
+        <select className="border rounded-md px-3 py-1 text-sm flex items-center justify-center">
           <option>Last 6 months</option>
-          <option>Last year</option>
-          <option>Last 2 years</option>
         </select>
       </div>
-      <Line data={chartData} options={options} className="h-64" />
+      <Line data={chartData} options={options} className="w-64 h-64 bg-special-purple" />
+      <div className="flex gap-4 p-4">
+        <CardComponent title={"Respiratory rate"} value={respiratoryRate?.value} status={respiratoryRate?.levels} icon={RespiratoryRate} bgColor={"bg-special-blue"} />
+        <CardComponent title={"Temperature"} value={temperature?.value} status={temperature?.levels} icon={Temperature} bgColor={"bg-special-orange"} />
+        <CardComponent title={"Heart Rate"} value={heartRate?.value} status={heartRate?.levels} icon={HeartBPM} bgColor={"bg-special-pink"} />
+      </div>
     </div>
   );
 }
