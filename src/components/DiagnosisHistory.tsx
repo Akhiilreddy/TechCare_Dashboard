@@ -9,8 +9,8 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { credentials } from '../utils/login';
 import { CardComponent } from './CardComponent';
 import RespiratoryRate from '../assets/respiratory rate.svg'
@@ -128,7 +128,7 @@ export const DiagnosisHistory = () => {
           stepSize: 20,
         },
         grid: {
-          color: '#f0f0f0',
+          color: '#D3D3D3',
         },
       },
       x: {

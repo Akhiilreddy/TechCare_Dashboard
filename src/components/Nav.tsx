@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Home from '../assets/Home.svg'
 import Patients from '../assets/Patients.svg'
@@ -7,7 +8,6 @@ import CreditCard from '../assets/CreditCard.svg'
 import TechCare from '../assets/TechCare.svg'
 import Settings from '../assets/Settings.svg'
 import MoreDots from '../assets/MoreDots.svg'
-import axios from 'axios';
 import { credentials } from '../utils/login';
 
 export const Navbar = () => {
@@ -69,11 +69,13 @@ export const Navbar = () => {
   );
 };
 
-const NavLink = ({ icon, text }: { icon: React.ReactNode; text?: string; active?: boolean }) => {
+const NavLink = ({ icon, text, active = false }: { icon: React.ReactNode; text?: string; active?: boolean }) => {
   return (
     <a
       href="#"
-      className="flex items-center px-2 font-semibold rounded-full"
+      className={`flex items-center px-4 py-2 font-semibold rounded-full ${
+        active ? 'bg-special-green text-black' : 'text-black hover:bg-gray-200'
+      }`}
     >
       <img src={icon} className="w-4 h-4 mr-1"/>
       <span>{text}</span>

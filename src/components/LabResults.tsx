@@ -1,9 +1,7 @@
-import { Download } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { credentials } from '../utils/login';
-
-const icon = <Download className="w-5 h-5" />
+import Download from '../assets/Download.svg'
 
 export const LabResults = () => {
 
@@ -37,7 +35,7 @@ export const LabResults = () => {
             className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
           >
             <span className="text-gray-800">{category}</span>
-            {icon}
+            <img src={Download} />
           </div>
         ))}
       </div>
