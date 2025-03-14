@@ -15,6 +15,7 @@ interface Patient {
 
 export const PatientsList = () => {
   const [patientList, setPatientList] = useState<Patient[]>([]);
+  const [selectedPatient, setSelectedPatient] = useState<Patient[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +27,7 @@ export const PatientsList = () => {
         });
         
         setPatientList(res.data);
-        // onPatientSelect(res.data[3].name);
+        setSelectedPatient(res.data[3]);
       } catch (err) {
         console.error("Error fetching: ", err);
       }
@@ -47,8 +48,11 @@ export const PatientsList = () => {
         {patientList.map((patient, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-3 rounded-lg cursor-pointer bg-light-special-green"
-          >
+            className={`flex items-center justify-between p-3 rounded-lg cursor-pointer ${
+              selectedPatient?.name === patient.name ? 'bg-light-special-green' : 'bg-white'
+            }`}
+            onClick={() => setSelectedPatient(patient)}          
+            >
             <div className="flex items-center space-x-3">
               <img
                 src={patient.profile_picture}

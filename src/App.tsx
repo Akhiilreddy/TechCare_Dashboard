@@ -10,9 +10,9 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <Navbar />
-      <div className="max-w-max mx-auto">
+      <div className="max-w-full mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          <div className="md:col-span-3">
+          <div className="md:col-span-3 w-full">
             <PatientsList/>
           </div>
           <div className="md:col-span-9">
@@ -23,7 +23,7 @@ function App() {
                   <DiagnosticList />
                 </div>
               </div>
-              <div className="md:col-span-1 gap-4">
+              <div className="md:col-span-1 flex flex-col gap-4">
                 <div className="mb-3">
                   <PatientInfo />
                 </div>
