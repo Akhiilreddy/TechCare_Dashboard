@@ -10,6 +10,7 @@ Ensure you have the following:
 ## Setup
 - Run `git clone https://github.com/Akhiilreddy/TechCare_Dashboard.git`
 - `npm install` to install all the dependencies
+- Follow `.env.example` to setup `.env` file
 - `npm run dev` to run the application  🎉
 - Application runs on `http://localhost:5173`, which is also displayed on the terminal.
 - If the port is busy, find out the port on the terminal.
