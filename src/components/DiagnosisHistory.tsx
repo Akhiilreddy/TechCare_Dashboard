@@ -16,6 +16,8 @@ import { CardComponent } from './CardComponent';
 import RespiratoryRate from '../assets/respiratory rate.svg'
 import Temperature from '../assets/temperature.svg'
 import HeartBPM from '../assets/HeartBPM.svg'
+import ArrowUp from '../assets/ArrowUp.svg'
+import ArrowDown from '../assets/ArrowDown.svg'
 
 ChartJS.register(
   CategoryScale,
@@ -27,12 +29,11 @@ ChartJS.register(
   Legend
 );
 
-
-export const BloodPressureChart = () => {
+export const DiagnosisHistory = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [apiData, setApiData] = useState<any>(undefined);
-  const [systolicAvg, setSystolicAvg] = useState<number>();
-  const [diastolicAvg, setDiastolicAvg] = useState<number>();
+  const [systolic, setSystolic] = useState<number>();
+  const [diastolic, setDiastolic] = useState<number>();
   const [respiratoryRate, setRespiratoryRate] = useState<number>();
   const [temperature, setTemperature] = useState<number>();
   const [heartRate, setHeartRate] = useState<number>();
@@ -57,13 +58,12 @@ export const BloodPressureChart = () => {
 
   useEffect(() => {
     if(apiData) {
-      setSystolicAvg(apiData[0].blood_pressure.diastolic);
-      setDiastolicAvg(apiData[0].blood_pressure.diastolic);
+      setSystolic(apiData[0].blood_pressure.systolic);
+      setDiastolic(apiData[0].blood_pressure.diastolic);
 
       setRespiratoryRate(apiData[0].respiratory_rate);
       setTemperature(apiData[0].temperature);
       setHeartRate(apiData[0].heart_rate);
-      
     }
   }, [apiData])
   
@@ -145,31 +145,44 @@ export const BloodPressureChart = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="bg-white p-6 rounded-lg shadow-lg overflow-hidden">
       <div className="flex justify-between items-center mb-4">
-        <div className="space-y-1">
-          <p className="text-2xl font-bold">Diagnosis History</p>
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold">Systolic</span>
-            <span className="text-lg font-bold">{systolicAvg?.value}</span>
-            <span className="text-sm text-gray-500">{systolicAvg?.levels}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold">Diastolic</span>
-            <span className="text-lg font-bold">{diastolicAvg?.value}</span>
-            <span className="text-sm text-gray-500">{diastolicAvg?.levels}</span>
-          </div>
-        </div>
+        <p className="text-2xl font-bold">Diagnosis History</p>
         <select className="border rounded-md px-3 py-1 text-sm flex items-center justify-center">
           <option>Last 6 months</option>
         </select>
       </div>
-      <Line data={chartData} options={options} className="w-64 h-64 bg-special-purple" />
-      <div className="flex gap-4 p-4">
-        <CardComponent title={"Respiratory rate"} value={respiratoryRate?.value} status={respiratoryRate?.levels} icon={RespiratoryRate} bgColor={"bg-special-blue"} />
-        <CardComponent title={"Temperature"} value={temperature?.value} status={temperature?.levels} icon={Temperature} bgColor={"bg-special-orange"} />
-        <CardComponent title={"Heart Rate"} value={heartRate?.value} status={heartRate?.levels} icon={HeartBPM} bgColor={"bg-special-pink"} />
+      <div className="p-2 flex flex-wrap justify-between bg-special-purple rounded-2xl">
+        <div className="w-3/4">
+          <Line data={chartData} options={options} />
+        </div>
+        <div className="flex flex-col justify-center items-start pl-4 w-1/4 space-y-2">
+          <div className="mb-2 flex flex-col items-start space-y-1">
+            <span className="text-xl">Systolic</span>
+            <span className="text-2xl font-bold">{systolic?.value}</span>
+            <span className="text-sm text-gray-500 flex">{Arrow(systolic?.levels)}{systolic?.levels}</span>
+          </div>
+          <div className="flex flex-col items-start space-y-1">
+            <span className="text-xl">Diastolic</span>
+            <span className="text-2xl font-bold">{diastolic?.value}</span>
+            <span className="text-sm text-gray-500 flex">{Arrow(diastolic?.levels)}{diastolic?.levels}</span>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap justify-between mt-4">
+        <CardComponent title={"Respiratory rate"} value={`${respiratoryRate?.value} bpm`} status={respiratoryRate?.levels} icon={RespiratoryRate} bgColor={"bg-special-blue"} />
+        <CardComponent title={"Temperature"} value={`${temperature?.value} °F`} status={temperature?.levels} icon={Temperature} bgColor={"bg-special-orange"} />
+        <CardComponent title={"Heart Rate"} value={`${heartRate?.value} bpm`} status={<span className="flex items-center">
+          {Arrow(heartRate?.levels)} {heartRate?.levels}
+        </span>} icon={HeartBPM} bgColor={"bg-special-pink"} />
       </div>
     </div>
   );
+}
+
+function Arrow(level: string){
+  return level === "Lower than Average" ?
+    <img src={ArrowDown}/>
+    :
+    <img src={ArrowUp}/>
 }

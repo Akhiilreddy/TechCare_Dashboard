@@ -1,16 +1,11 @@
 import { Download } from 'lucide-react';
-import type { LabResult } from '../types';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { credentials } from '../utils/login';
 
-interface Props {
-  results: LabResult[];
-}
-
 const icon = <Download className="w-5 h-5" />
 
-export const LabResults = ({ results }: Props) => {
+export const LabResults = () => {
 
   const [labResults, setLabResults] = useState<string[]>([]);
 
@@ -33,7 +28,7 @@ export const LabResults = ({ results }: Props) => {
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="bg-white mt-4 p-6 rounded-lg shadow-lg">
       <h3 className="text-xl font-semibold mb-6">Lab Results</h3>
       <div className="space-y-3">
         {labResults.map((category, index) => (

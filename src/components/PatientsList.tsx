@@ -12,12 +12,8 @@ interface Patient {
   profile_picture: string;
 }
 
-interface Props {
-  selectedPatientId: string;
-  onPatientSelect: (id: string) => void;
-}
 
-export const PatientsList = ({ selectedPatientId, onPatientSelect }: Props) => {
+export const PatientsList = () => {
   const [patientList, setPatientList] = useState<Patient[]>([]);
 
   useEffect(() => {
@@ -30,7 +26,7 @@ export const PatientsList = ({ selectedPatientId, onPatientSelect }: Props) => {
         });
         
         setPatientList(res.data);
-        onPatientSelect(res.data[3].name);
+        // onPatientSelect(res.data[3].name);
       } catch (err) {
         console.error("Error fetching: ", err);
       }
@@ -47,14 +43,11 @@ export const PatientsList = ({ selectedPatientId, onPatientSelect }: Props) => {
           <img src={Search} />
         </div>
       </div>
-      <div className="space-y-4 max-h-96 overflow-y-auto">
+      <div className="space-y-4 h-screen overflow-y-auto">
         {patientList.map((patient, index) => (
           <div
             key={index}
-            onClick={() => onPatientSelect(patient.name)}
-            className={`flex items-center justify-between p-3 rounded-lg cursor-pointer ${
-              selectedPatientId === patient.name ? 'bg-light-special-green' : 'hover:bg-gray-200'
-            }`}
+            className="flex items-center justify-between p-3 rounded-lg cursor-pointer bg-light-special-green"
           >
             <div className="flex items-center space-x-3">
               <img

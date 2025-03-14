@@ -6,13 +6,7 @@ import FemaleIcon from '../assets/FemaleIcon.svg';
 import InsuranceIcon from '../assets/InsuranceIcon.svg';
 import PhoneIcon from '../assets/PhoneIcon.svg';
 
-interface Props {
-  name: string;
-  age: number;
-  gender: string;
-}
-
-export const PatientInfo = ({ name, age, gender }: Props) => {
+export const PatientInfo = () => {
 
   const [patientInfo, setPatientInfo] = useState<string[]>([]);
 
@@ -38,11 +32,10 @@ export const PatientInfo = ({ name, age, gender }: Props) => {
     <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
       <img 
         src={patientInfo.profile_picture}
-        alt={name}
         className="w-32 h-32 rounded-full mb-4 object-cover"
       />
       <h2 className="text-2xl font-bold text-gray-800 mb-4">{patientInfo.name}</h2>
-      <div className="w-full space-y-4">
+      <div className="p-2 w-full space-y-4">
 
         <div className="pb-3 flex items-center"><img src={BirthIcon} className="w-10 h-10 mr-2"/> 
           <div>

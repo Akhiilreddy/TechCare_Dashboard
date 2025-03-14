@@ -1,14 +1,10 @@
 import axios from 'axios';
 import { credentials } from '../utils/login';
-import { DiagnosticRecord } from '../types';
 import { useEffect, useState } from 'react';
 
-interface Props {
-  diagnostics: DiagnosticRecord[];
-}
 
-export const DiagnosticList = ({ diagnostics }: Props) => {
-  const [apiDiagnostics, setApiDiagnostics] = useState<DiagnosticRecord[]>([]);
+export const DiagnosticList = () => {
+  const [apiDiagnostics, setApiDiagnostics] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
